@@ -38,18 +38,38 @@ def create_app(test_config=None):
         except:
             abort(422)
 
-    '''
-  @TODO: 
-  Create an endpoint to handle GET requests for questions, 
-  including pagination (every 10 questions). 
-  This endpoint should return a list of questions, 
-  number of total questions, current category, categories. 
+    @app.route('/questions')
+    def get_all_questions():
+        try:
+            questions = Question.query.paginate(1, QUESTIONS_PER_PAGE, False)
+            # questions = Question.query.all()
+            formatted_questions = [
+                question.format() for question in questions.items
+            ]
+            categories = Category.query.all()
+            formatted_categories = [
+                category.format() for category in categories
+            ]
 
-  TEST: At this point, when you start the application
-  you should see questions and categories generated,
-  ten questions per page and pagination at the bottom of the screen for three pages.
-  Clicking on the page numbers should update the questions. 
-  '''
+            category_keys = []
+            category_values = []
+
+            for category in formatted_categories:
+                category_keys.append(category['id'])
+                category_values.append(category['type'])
+
+            categories_dict = dict(zip(category_keys, category_values))
+
+            return jsonify({
+                'success': True,
+                'questions': formatted_questions,
+                'categories': categories_dict,
+                'current_category': None,
+                'total_questions': questions.total,
+            })
+        except Exception as e:
+            print(e)
+            abort(422)
     '''
   @TODO: 
   Create an endpoint to DELETE question using a question ID. 
