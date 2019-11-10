@@ -190,6 +190,27 @@ def create_app(test_config=None):
       one question at a time is displayed, the user is allowed to answer
       and shown whether they were correct or not. 
       '''
+    @app.route('/quizzes', methods=['POST'])
+    def play_quiz():
+        try:
+            category = request.get_json()['quiz_category']['id']
+            category = int(category)
+            if category == 0:
+                questions = get_all_questions().get_json()
+            else:
+                questions = get_questions_by_category(category).get_json()
+            previous_questions = request.get_json()['previous_questions']
+            return jsonify({
+                'quizCategory': 'ALL' if category == 0 else questions['categories'][str(category)],
+                'categories': questions['categories'],
+                'question': questions['questions'][len(previous_questions)]
+                if len(questions['questions']) > len(previous_questions) else questions['questions'][0],
+                'success': True
+            })
+        except Exception as e:
+            print(e)
+            abort(e.code)
+
     @app.errorhandler(400)
     def bad_request(error):
         return jsonify({

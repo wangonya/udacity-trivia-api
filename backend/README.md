@@ -301,6 +301,43 @@ One note before you delve into your tasks: for each endpoint you are expected to
 }
 ```
 
+### POST '/quizzes'
+
+- Play quiz
+- Request Arguments: `quiz_category`
+
+```json5
+{
+  "quiz_category": {
+    "id": 1
+  }
+}
+```
+
+- Returns: 
+
+```json5
+{
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "question": {
+    "answer": "The Liver",
+    "category": 1,
+    "difficulty": 4,
+    "id": 20,
+    "question": "What is the heaviest organ in the human body?"
+  },
+  "quizCategory": "Science",
+  "success": true
+}
+```
+
 ## Errors
 
 ### Not found (400)
