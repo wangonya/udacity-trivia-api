@@ -31,12 +31,21 @@ def create_app(test_config=None):
             formatted_categories = [
                 category.format() for category in categories
             ]
+            category_keys = []
+            category_values = []
+
+            for category in formatted_categories:
+                category_keys.append(category['id'])
+                category_values.append(category['type'])
+
+            categories_dict = dict(zip(category_keys, category_values))
             return jsonify({
                 'success': True,
-                'categories': formatted_categories
+                'categories': categories_dict
             })
-        except:
-            abort(422)
+        except Exception as e:
+            print(e)
+            abort(e.code)
 
     @app.route('/questions')
     def get_all_questions():
@@ -69,7 +78,7 @@ def create_app(test_config=None):
             })
         except Exception as e:
             print(e)
-            abort(422)
+            abort(e.code)
 
     @app.route('/questions/<int:question_id>', methods=['DELETE'])
     def delete_question(question_id):
@@ -80,24 +89,26 @@ def create_app(test_config=None):
             question.delete()
             return get_all_questions()
         except Exception as e:
-            err = e.__class__.__name__
-            if err == 'NotFound':
-                abort(404)
-            elif err == 'BadRequest':
-                abort(400)
-            else:
-                abort(422)
+            print(e)
+            abort(e.code)
 
-    '''
-  @TODO: 
-  Create an endpoint to POST a new question, 
-  which will require the question and answer text, 
-  category, and difficulty score.
-
-  TEST: When you submit a question on the "Add" tab, 
-  the form will clear and the question will appear at the end of the last page
-  of the questions list in the "List" tab.  
-  '''
+    @app.route('/questions', methods=['POST'])
+    def post_new_question():
+        try:
+            question = request.get_json()
+            for value in question.values():
+                if not value:
+                    abort(400)
+            Question(
+                question=question['question'],
+                answer=question['answer'],
+                category=question['category'],
+                difficulty=question['difficulty']
+            ).insert()
+            return jsonify(question), 201
+        except Exception as e:
+            print(e)
+            abort(e.code)
     '''
   @TODO: 
   Create a POST endpoint to get questions based on a search term. 
