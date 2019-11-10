@@ -182,6 +182,34 @@ One note before you delve into your tasks: for each endpoint you are expected to
 }
 ```
 
+### POST '/questions'
+
+- Adds a new question
+- Request Arguments: Question body
+
+```json5
+{
+  "question": "test",
+  "answer": "test",
+  "difficulty": 1,
+  "category": 1
+}
+```
+
+- Returns: 
+
+```json5
+{
+  "question": {
+    "answer": "test",
+    "category": 1,
+    "difficulty": 1,
+    "question": "test"
+  },
+  "success": true
+}
+```
+
 ## Errors
 
 ### Not found (400)
