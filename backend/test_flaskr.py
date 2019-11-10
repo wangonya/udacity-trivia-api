@@ -54,6 +54,10 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 400)
         self.assertEqual(res.get_json()['success'], False)
 
+    def test_questions_category_404(self):
+        res = self.client.get('/categories/4242323423/questions')
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.get_json()['success'], False)
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
