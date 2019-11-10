@@ -210,6 +210,52 @@ One note before you delve into your tasks: for each endpoint you are expected to
 }
 ```
 
+
+### POST '/questions/search'
+
+- Search questions
+- Request Arguments: searchTerm
+
+```json5
+{
+  "searchTerm": "test"
+}
+```
+
+- Returns: 
+
+```json5
+{
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "current_category": null,
+  "questions": [
+    {
+      "answer": "test",
+      "category": 1,
+      "difficulty": 1,
+      "id": 24,
+      "question": "test"
+    },
+    {
+      "answer": "test",
+      "category": 1,
+      "difficulty": 1,
+      "id": 26,
+      "question": "test"
+    }
+  ],
+  "success": true,
+  "total_questions": 2
+}
+```
+
 ## Errors
 
 ### Not found (400)

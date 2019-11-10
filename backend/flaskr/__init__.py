@@ -112,35 +112,58 @@ def create_app(test_config=None):
         except Exception as e:
             print(e)
             abort(e.code)
-    '''
-  @TODO: 
-  Create a POST endpoint to get questions based on a search term. 
-  It should return any questions for whom the search term 
-  is a substring of the question. 
 
-  TEST: Search by any phrase. The questions list will update to include 
-  only question that include that string within their question. 
-  Try using the word "title" to start. 
-  '''
-    '''
-  @TODO: 
-  Create a GET endpoint to get questions based on category. 
+    @app.route('/questions/search', methods=['POST'])
+    def search_questions():
+        try:
+            questions = Question.query.filter(
+                        Question.question.ilike(f"%{request.get_json()['searchTerm']}%")).all()
+            formatted_questions = [
+                question.format() for question in questions
+            ]
+            categories = Category.query.all()
+            formatted_categories = [
+                category.format() for category in categories
+            ]
 
-  TEST: In the "List" tab / main screen, clicking on one of the 
-  categories in the left column will cause only questions of that 
-  category to be shown. 
-  '''
-    '''
-  @TODO: 
-  Create a POST endpoint to get questions to play the quiz. 
-  This endpoint should take category and previous question parameters 
-  and return a random questions within the given category, 
-  if provided, and that is not one of the previous questions. 
+            category_keys = []
+            category_values = []
 
-  TEST: In the "Play" tab, after a user selects "All" or a category,
-  one question at a time is displayed, the user is allowed to answer
-  and shown whether they were correct or not. 
-  '''
+            for category in formatted_categories:
+                category_keys.append(category['id'])
+                category_values.append(category['type'])
+
+            categories_dict = dict(zip(category_keys, category_values))
+
+            return jsonify({
+                'success': True,
+                'questions': formatted_questions,
+                'categories': categories_dict,
+                'current_category': None,
+                'total_questions': len(questions),
+            }), 201
+        except Exception as e:
+            print(e)
+            abort(e.code)
+    '''
+      @TODO: 
+      Create a GET endpoint to get questions based on category. 
+    
+      TEST: In the "List" tab / main screen, clicking on one of the 
+      categories in the left column will cause only questions of that 
+      category to be shown. 
+      '''
+    '''
+      @TODO: 
+      Create a POST endpoint to get questions to play the quiz. 
+      This endpoint should take category and previous question parameters 
+      and return a random questions within the given category, 
+      if provided, and that is not one of the previous questions. 
+    
+      TEST: In the "Play" tab, after a user selects "All" or a category,
+      one question at a time is displayed, the user is allowed to answer
+      and shown whether they were correct or not. 
+      '''
     @app.errorhandler(400)
     def bad_request(error):
         return jsonify({
