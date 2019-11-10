@@ -1,10 +1,8 @@
-import os
 import unittest
-import json
-from flask_sqlalchemy import SQLAlchemy
 
+from flask_sqlalchemy import SQLAlchemy
 from flaskr import create_app
-from models import setup_db, Question, Category
+from models import setup_db
 
 
 class TriviaTestCase(unittest.TestCase):
@@ -38,6 +36,24 @@ class TriviaTestCase(unittest.TestCase):
         res = self.client.get('/questions')
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.get_json()['success'], True)
+
+    def test_post_new_questions(self):
+        data = {
+            "question": "test",
+            "answer": "test",
+            "difficulty": 1,
+            "category": 1
+        }
+        res = self.client.post('/questions', json=data)
+        self.assertEqual(res.status_code, 201)
+        self.assertEqual(res.get_json()['success'], True)
+
+        # test failure (400)
+        data.update({"question": ""})
+        res = self.client.post('/questions', json=data)
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.get_json()['success'], False)
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
