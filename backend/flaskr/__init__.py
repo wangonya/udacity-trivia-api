@@ -105,7 +105,10 @@ def create_app(test_config=None):
                 category=question['category'],
                 difficulty=question['difficulty']
             ).insert()
-            return jsonify(question), 201
+            return jsonify({
+                'question': question,
+                'success': True
+            }), 201
         except Exception as e:
             print(e)
             abort(e.code)
