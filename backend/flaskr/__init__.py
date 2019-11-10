@@ -145,14 +145,40 @@ def create_app(test_config=None):
         except Exception as e:
             print(e)
             abort(e.code)
-    '''
-      @TODO: 
-      Create a GET endpoint to get questions based on category. 
-    
-      TEST: In the "List" tab / main screen, clicking on one of the 
-      categories in the left column will cause only questions of that 
-      category to be shown. 
-      '''
+
+    @app.route('/categories/<int:category_id>/questions')
+    def get_questions_by_category(category_id):
+        try:
+            questions = Question.query.filter_by(category=category_id).all()
+            if not questions:
+                abort(404)
+            formatted_questions = [
+                question.format() for question in questions
+            ]
+            categories = Category.query.all()
+            formatted_categories = [
+                category.format() for category in categories
+            ]
+
+            category_keys = []
+            category_values = []
+
+            for category in formatted_categories:
+                category_keys.append(category['id'])
+                category_values.append(category['type'])
+
+            categories_dict = dict(zip(category_keys, category_values))
+
+            return jsonify({
+                'success': True,
+                'questions': formatted_questions,
+                'categories': categories_dict,
+                'current_category': categories_dict[category_id],
+                'total_questions': len(questions),
+            })
+        except Exception as e:
+            print(e)
+            abort(e.code)
     '''
       @TODO: 
       Create a POST endpoint to get questions to play the quiz. 
