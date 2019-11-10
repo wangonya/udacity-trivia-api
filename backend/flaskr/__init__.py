@@ -141,7 +141,7 @@ def create_app(test_config=None):
                 'categories': categories_dict,
                 'current_category': None,
                 'total_questions': len(questions),
-            }), 201
+            }), 200
         except Exception as e:
             print(e)
             abort(e.code)
@@ -179,7 +179,7 @@ def create_app(test_config=None):
         except Exception as e:
             print(e)
             abort(e.code)
-            
+
     @app.route('/quizzes', methods=['POST'])
     def play_quiz():
         try:
