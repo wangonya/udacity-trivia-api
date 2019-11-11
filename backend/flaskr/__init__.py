@@ -115,7 +115,7 @@ def create_app(test_config=None):
         except Exception as e:
             abort(e.code)
 
-    @app.route('/questions/search', methods=['POST'])
+    @app.route('/questions/results', methods=['POST'])
     def search_questions():
         try:
             questions = Question.query.filter(
