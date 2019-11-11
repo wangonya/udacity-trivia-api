@@ -256,7 +256,7 @@ One note before you delve into your tasks: for each endpoint you are expected to
 }
 ```
 
-### POST '/questions/search'
+### POST '/questions/results'
 
 - Search questions
 - Request Arguments: searchTerm
