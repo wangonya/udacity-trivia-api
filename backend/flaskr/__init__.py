@@ -91,7 +91,9 @@ def create_app(test_config=None):
             if not question:
                 abort(404)
             question.delete()
-            return get_all_questions()
+            return jsonify({
+                'success': True
+            })
         except Exception as e:
             print(e)
             abort(e.code)
