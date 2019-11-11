@@ -45,7 +45,6 @@ def create_app(test_config=None):
                 'categories': categories_dict
             })
         except Exception as e:
-            print(e)
             abort(e.code)
 
     @app.route('/questions')
@@ -81,7 +80,6 @@ def create_app(test_config=None):
                 'total_questions': len(questions),
             })
         except Exception as e:
-            print(e)
             abort(e.code)
 
     @app.route('/questions/<int:question_id>', methods=['DELETE'])
@@ -95,7 +93,6 @@ def create_app(test_config=None):
                 'success': True
             })
         except Exception as e:
-            print(e)
             abort(e.code)
 
     @app.route('/questions', methods=['POST'])
@@ -116,7 +113,6 @@ def create_app(test_config=None):
                 'success': True
             }), 201
         except Exception as e:
-            print(e)
             abort(e.code)
 
     @app.route('/questions/search', methods=['POST'])
@@ -149,7 +145,6 @@ def create_app(test_config=None):
                 'total_questions': len(questions),
             }), 200
         except Exception as e:
-            print(e)
             abort(e.code)
 
     @app.route('/categories/<int:category_id>/questions')
@@ -183,7 +178,6 @@ def create_app(test_config=None):
                 'total_questions': len(questions),
             })
         except Exception as e:
-            print(e)
             abort(e.code)
 
     @app.route('/quizzes', methods=['POST'])
@@ -204,7 +198,6 @@ def create_app(test_config=None):
                 'success': True
             })
         except Exception as e:
-            print(e)
             abort(e.code)
 
     @app.errorhandler(400)
