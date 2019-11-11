@@ -184,6 +184,8 @@ def create_app(test_config=None):
     def play_quiz():
         try:
             category = request.get_json()['quiz_category']['id']
+            if not category:
+                abort(400)
             category = int(category)
             if category == 0:
                 questions = get_all_questions().get_json()
@@ -196,7 +198,7 @@ def create_app(test_config=None):
                 'question': questions['questions'][len(previous_questions)]
                 if len(questions['questions']) > len(previous_questions) else questions['questions'][0],
                 'success': True
-            })
+            }), 200
         except Exception as e:
             abort(e.code)
 
