@@ -3,6 +3,7 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
+import requests
 
 from models import setup_db, Question, Category
 
@@ -50,10 +51,13 @@ def create_app(test_config=None):
     @app.route('/questions')
     def get_all_questions():
         try:
-            questions = Question.query.paginate(1, QUESTIONS_PER_PAGE, False)
-            # questions = Question.query.all()
+            page = request.args.get('page', 1, type=int)
+            start = (page - 1) * 10
+            end = start + 10
+            # questions = Question.query.paginate(1, QUESTIONS_PER_PAGE, False)
+            questions = Question.query.all()
             formatted_questions = [
-                question.format() for question in questions.items
+                question.format() for question in questions
             ]
             categories = Category.query.all()
             formatted_categories = [
@@ -71,10 +75,10 @@ def create_app(test_config=None):
 
             return jsonify({
                 'success': True,
-                'questions': formatted_questions,
+                'questions': formatted_questions[start:end],
                 'categories': categories_dict,
                 'current_category': None,
-                'total_questions': questions.total,
+                'total_questions': len(questions),
             })
         except Exception as e:
             print(e)
